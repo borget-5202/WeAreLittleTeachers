@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Group by 2s/3s</title>
+  <style>
+    .apple { width: 50px; height: 50px; margin: 10px; cursor: move; }
+    #bucket { width: 200px; height: 200px; border: 2px dashed black; margin: 20px; }
+    #controls { margin: 10px; }
+    #counter { font-size: 24px; }
+  </style>
+</head>
+<body>
+  <h1>Group the Apples!</h1>
+  <div id="controls">
+    <button onclick="setGroupSize(2)">Group by 2s</button>
+    <button onclick="setGroupSize(3)">Group by 3s</button>
+    <div id="counter">Groups: 0</div>
+  </div>
+  <div id="apples">
+    <!-- Apples will be added by JavaScript -->
+  </div>
+  <div id="bucket"></div>
+
+  <script>
+    let groupSize = 2;
+    let groupCount = 0;
+
+    function setGroupSize(size) {
+      groupSize = size;
+      resetGame();
+    }
+
+    function resetGame() {
+      document.getElementById("apples").innerHTML = '';
+      document.getElementById("bucket").innerHTML = '';
+      groupCount = 0;
+      updateCounter();
+      // Add 6 apples for demo (adjust as needed)
+      for (let i = 1; i <= 6; i++) {
+        const apple = document.createElement("img");
+        apple.src = "apple.png";
+        apple.className = "apple";
+        apple.draggable = true;
+        apple.id = `apple${i}`;
+        document.getElementById("apples").appendChild(apple);
+        setupDrag(apple);
+      }
+    }
+
+    function setupDrag(apple) {
+      apple.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", apple.id);
+      });
+    }
+
+    function updateCounter() {
+      document.getElementById("counter").textContent = `Groups: ${groupCount}`;
+    }
+
+    document.getElementById("bucket").addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    document.getElementById("bucket").addEventListener("drop", (e) => {
+      e.preventDefault();
+      const appleId = e.dataTransfer.getData("text/plain");
+      const apple = document.getElementById(appleId);
+      if (apple) {
+        e.target.appendChild(apple);
+        if (e.target.children.length % groupSize === 0) {
+          groupCount++;
+          updateCounter();
+        }
+      }
+    });
+
+    // Initialize the game
+    resetGame();
+  </script>
+</body>
+</html>
