@@ -17,7 +17,7 @@
     <div id="counter">Groups: 0</div>
   </div>
   <div id="apples">
-    <!-- Apples will be added by JavaScript -->
+    <!-- Apples will be addelld by JavaScript -->
   </div>
   <div id="bucket"></div>
 
